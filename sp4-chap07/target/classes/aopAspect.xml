@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- @Aspect 애노테이션이 적용된 빈 객체를 Advice로 사용하기 위해 필요한 태그 -->
+    <aop:aspectj-autoproxy/>
+
+    <!-- 공통 기능을 제공할 클래스를 빈으로 등록 -->
+    <bean id="exeTimeAspect" class="aspect.ExeTimeAspect2" />
+
+    <bean id="impCal" class="chap07.ImpCalculator"></bean>
+    <bean id="recCal" class="chap07.RecCalculator"></bean>
+
+</beans>
