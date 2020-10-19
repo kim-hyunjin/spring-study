@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:annotation-config />
+<!--    <aop:aspectj-autoproxy />-->
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost/spring4fs?characterEncoding=utf8" />
+        <property name="user" value="spring4" />
+        <property name="password" value="spring4" />
+        <property name="maxPoolSize" value="100" />
+        <property name="maxIdleTime" value="600" />
+        <property name="idleConnectionTestPeriod" value="300" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="exeTimeAspect" class="aspect.ExeTimeAspect"></bean>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="measureAspect" ref="exeTimeAspect">
+            <aop:pointcut id="publicMethod" expression="execution(public * spring..*.print*(..))"/>
+            <aop:around pointcut-ref="publicMethod" method="measure" />
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="memberDao" class="spring.MemberDao">
+        <constructor-arg ref="dataSource" />
+    </bean>
+
+    <bean id="memberRegSvc" class="spring.MemberRegisterService">
+    </bean>
+
+    <bean id="changePwdSvc" class="spring.ChangePasswordService">
+    </bean>
+
+    <bean id="memberPrinter" class="spring.MemberPrinter"></bean>
+
+    <bean id="memberListPrinter" class="spring.MemberListPrinter">
+    </bean>
+
+    <bean id="client" class="spring.Client"
+        init-method="connect" destroy-method="close">
+        <property name="host" value="서버"/>
+    </bean>
+</beans>
