@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd">
+       http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/spring4fs?characterEncoding=utf8&amp;serverTimezone=UTC
-"/>
-        <property name="user" value="spring4"/>
-        <property name="password" value="spring4"/>
-    </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <constructor-arg ref="dataSource"/>
